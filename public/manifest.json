@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Simon",
+  "name": "Simon: a call-and-response musical game",
   "icons": [
     {
       "src": "favicon.ico",
