@@ -5,7 +5,19 @@ describe('FrequencyUtils', () => {
     expect(FrequencyUtils.getFrequencyFromPitch(69)).toBe(440);
   });
 
-  it('should convert 440Hz to pitch 69', () => {
+  it('should convert 440Hz to pitch 69 with rounding', () => {
     expect(FrequencyUtils.getPitchFromFrequency(440)).toBe(69);
+  });
+
+  it('should convert 440Hz to pitch 69 without rounding', () => {
+    expect(FrequencyUtils.getPitchFromFrequency(440, false)).toBe(69);
+  });
+
+  it('should convert 441Hz to pitch 69 with rounding', () => {
+    expect(FrequencyUtils.getPitchFromFrequency(441)).toBe(69);
+  });
+
+  it('should convert 441Hz to pitch 69.0393... without rounding', () => {
+    expect(FrequencyUtils.getPitchFromFrequency(441, false)).toBe(69.03930158439434);
   });
 });
