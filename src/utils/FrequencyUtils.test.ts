@@ -20,4 +20,8 @@ describe('FrequencyUtils', () => {
   it('should convert 441Hz to pitch 69.0393... without rounding', () => {
     expect(FrequencyUtils.getPitchFromFrequency(441, false)).toBe(69.03930158439434);
   });
+
+  it('should convert 0Hz to pitch 0', () => {
+    expect(FrequencyUtils.getPitchFromFrequency(0)).toBe(0);
+  });
 });

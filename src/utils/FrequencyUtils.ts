@@ -4,7 +4,7 @@ export default class FrequencyUtils {
   }
 
   static getPitchFromFrequency(frequency: number, rounded: boolean = true): number {
-    if (frequency === -1) {
+    if (frequency <= 0) {
       return 0;
     }
 
