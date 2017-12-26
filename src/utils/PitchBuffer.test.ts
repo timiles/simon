@@ -9,7 +9,7 @@ describe('PitchBuffer', () => {
   beforeEach(() => {
     pitchBuffer = new PitchBuffer();
     completedNotes = new Array<Note>();
-    pitchBuffer.addListener('onNoteCompleted', n => completedNotes.push(n));
+    pitchBuffer.onNoteCompleted(n => completedNotes.push(n));
   });
 
   it('should emit pitch 96 when given pitch 96', () => {

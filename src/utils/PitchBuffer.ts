@@ -47,4 +47,8 @@ export default class PitchBuffer extends EventEmitter {
         const lastTime = this.buf[this.buf.length - 1].startTime;
         this.push(lastTime + this.minimumNoteDurationSeconds, 0);
     }
+
+    onNoteCompleted(listener: (completedNote: Note) => void) {
+        return this.on('onNoteCompleted', listener);
+    }
 }
