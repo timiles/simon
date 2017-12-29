@@ -13,6 +13,7 @@ class TimestampedPitch {
 
 export default class PitchBuffer extends EventEmitter {
     private buf: Array<TimestampedPitch>;
+    private onNoteCompletedListener: (completedNote: Note) => void | undefined;
 
     constructor(private minimumNoteDurationSeconds: number = .05) {
         super();
@@ -49,6 +50,13 @@ export default class PitchBuffer extends EventEmitter {
     }
 
     onNoteCompleted(listener: (completedNote: Note) => void) {
-        return this.on('onNoteCompleted', listener);
+        this.onNoteCompletedListener = listener;
+        this.on('onNoteCompleted', listener);
+    }
+
+    removeOnNoteCompletedListener() {
+        if (this.onNoteCompletedListener) {
+            this.removeListener('onNoteCompleted', this.onNoteCompletedListener);
+        }
     }
 }

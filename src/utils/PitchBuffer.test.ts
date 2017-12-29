@@ -21,6 +21,15 @@ describe('PitchBuffer', () => {
     expect(completedNotes[0].durationSeconds).toBe(1);
   });
 
+  it('should not emit notes after removing listener', () => {
+    pitchBuffer.removeOnNoteCompletedListener();
+
+    pitchBuffer.push(0, 96);
+    pitchBuffer.push(1, 0);
+
+    expect(completedNotes.length).toBe(0);
+  });
+
   it('should emit rounded pitch when given notes close together', () => {
     pitchBuffer.push(0, 95.6);
     pitchBuffer.push(1, 96.4);
@@ -69,7 +78,7 @@ describe('PitchBuffer', () => {
     expect(completedNotes[1].durationSeconds).toBe(0.99);
   });
 
-  fit('should emit pitch of minimum length after a flush', () => {
+  it('should emit pitch of minimum length after a flush', () => {
     pitchBuffer.push(0, 96);
     pitchBuffer.flush();
 
@@ -77,4 +86,5 @@ describe('PitchBuffer', () => {
     expect(completedNotes[0].pitch).toBe(96);
     expect(completedNotes[0].durationSeconds).toBe(0.05);
   });
+
 });
