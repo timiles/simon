@@ -36,9 +36,12 @@ export default class NoteListener {
     this.updatePitch();
   }
 
-  stop(): void {
+  stop(flush: boolean = false): void {
     window.cancelAnimationFrame(this.animationFrameId);
-    this.pitchBuffer.flush();
+    this.pitchBuffer.removeOnNoteCompletedListener();
+    if (flush) {
+      this.pitchBuffer.flush();
+    }
   }
 
   // use () => syntax so callback keeps `this` context
