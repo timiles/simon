@@ -1,6 +1,7 @@
 {
   "name": "simon",
   "version": "0.1.0",
+  "homepage": "https://timiles.github.io/simon",
   "private": true,
   "dependencies": {
     "react": "^16.1.1",
@@ -11,12 +12,15 @@
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject"
+    "eject": "react-scripts-ts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "devDependencies": {
     "@types/jest": "^21.1.6",
     "@types/node": "^8.0.53",
     "@types/react": "^16.0.25",
-    "@types/react-dom": "^16.0.3"
+    "@types/react-dom": "^16.0.3",
+    "gh-pages": "^1.1.0"
   }
 }
