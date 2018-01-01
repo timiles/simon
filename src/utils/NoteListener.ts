@@ -1,14 +1,17 @@
+import { AnalyserInterface } from './FrequencyAnalysers/AnalyserInterface';
 import FrequencyUtils from './FrequencyUtils';
 import PitchBuffer from './PitchBuffer';
 import Note from '../Note';
+import TimeDomainDataAnalyser from './FrequencyAnalysers/TimeDomainDataAnalyser';
 
 export default class NoteListener {
   private pitchBuffer: PitchBuffer;
   private animationFrameId: number;
-  private analyser: AnalyserNode;
+  private analyser: AnalyserInterface;
 
   constructor(private audioContext: AudioContext) {
     this.pitchBuffer = new PitchBuffer();
+    this.analyser = new TimeDomainDataAnalyser(audioContext);
   }
 
   initialise(): Promise<void> {
@@ -17,9 +20,7 @@ export default class NoteListener {
         { audio: true },
         stream => {
           const mediaStreamSource = this.audioContext.createMediaStreamSource(stream);
-          this.analyser = this.audioContext.createAnalyser();
-          this.analyser.fftSize = 2048;
-          mediaStreamSource.connect(this.analyser);
+          mediaStreamSource.connect(this.analyser.getNode());
           resolve();
         },
         (e) => {
@@ -47,10 +48,7 @@ export default class NoteListener {
   // use () => syntax so callback keeps `this` context
   private updatePitch = () => {
 
-    const dataArray = new Float32Array(this.analyser.fftSize);
-    this.analyser.getFloatTimeDomainData(dataArray);
-
-    const frequency = FrequencyUtils.getFrequencyFromTimeDomainData(dataArray, this.audioContext.sampleRate);
+    const frequency = this.analyser.getFrequency();
     this.pitchBuffer.push(this.audioContext.currentTime, FrequencyUtils.getPitchFromFrequency(frequency, false));
 
     // repeat
