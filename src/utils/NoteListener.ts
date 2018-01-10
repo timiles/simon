@@ -2,7 +2,7 @@ import { AnalyserInterface } from './FrequencyAnalysers/AnalyserInterface';
 import FrequencyUtils from './FrequencyUtils';
 import PitchBuffer from './PitchBuffer';
 import Note from '../Note';
-import TimeDomainDataAnalyser from './FrequencyAnalysers/TimeDomainDataAnalyser';
+import FrequencyDataAnalyser from './FrequencyAnalysers/FrequencyDataAnalyser';
 
 export default class NoteListener {
   private pitchBuffer: PitchBuffer;
@@ -11,7 +11,7 @@ export default class NoteListener {
 
   constructor(private audioContext: AudioContext) {
     this.pitchBuffer = new PitchBuffer();
-    this.analyser = new TimeDomainDataAnalyser(audioContext);
+    this.analyser = new FrequencyDataAnalyser(audioContext);
   }
 
   initialise(): Promise<void> {
