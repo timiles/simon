@@ -3,6 +3,9 @@ import './Main.css';
 import NotePlayer from '../utils/NotePlayer';
 import Note from '../Note';
 import NoteListener from '../utils/NoteListener';
+import InstrumentSelector from './InstrumentSelector';
+import Instrument from '../Instrument';
+import InstrumentsDataSource from '../InstrumentsDataSource';
 
 export interface State {
   isGameStarted: boolean;
@@ -15,12 +18,13 @@ export interface State {
 class Main extends React.Component<object, State> {
   private audioContext: AudioContext;
   private noteListener: NoteListener;
+  private currentInstrument: Instrument;
 
-  private static generateRandomNotes(count: number): Array<Note> {
+  private static generateRandomNotes(count: number, minPitch: number): Array<Note> {
     let notes = new Array<Note>();
     let previousPitch = 0;
     while (notes.length < count) {
-      const pitch = Math.floor(Math.random() * 11) + 67;
+      const pitch = Math.floor(Math.random() * 11) + minPitch;
       if (pitch !== previousPitch) {
         const note = new Note(pitch, 1);
         notes.push(note);
@@ -33,6 +37,7 @@ class Main extends React.Component<object, State> {
   constructor(props: object) {
     super(props);
 
+    this.currentInstrument = InstrumentsDataSource.all[0];
     this.state = {
       isGameStarted: false,
       isNoteListenerInitialised: false,
@@ -57,7 +62,7 @@ class Main extends React.Component<object, State> {
   }
 
   startGame(): void {
-    let simonsNotes = Main.generateRandomNotes(5);
+    let simonsNotes = Main.generateRandomNotes(5, this.currentInstrument.getFirstCTransposed());
     this.setState(
       {
         isGameStarted: true,
@@ -114,6 +119,10 @@ class Main extends React.Component<object, State> {
     this.setState({ isNoteListenerStarted: true });
   }
 
+  onSelectedInstrumentChanged(instrument: Instrument) {
+    this.currentInstrument = instrument;
+  }
+
   render() {
     let simonsNoteSpans = [];
     for (let i = 0; i < this.state.simonsNotes.length; i++) {
@@ -125,6 +134,13 @@ class Main extends React.Component<object, State> {
     }
     return (
       <div>
+        <div>
+          Pick an instrument:
+          <InstrumentSelector
+            initialInstrumentName={this.currentInstrument.name}
+            onInstrumentChanged={(instrument) => this.onSelectedInstrumentChanged(instrument)}
+          />
+        </div>
         <button
           disabled={!this.state.isNoteListenerInitialised || this.state.isGameStarted}
           onClick={() => this.startGame()}
