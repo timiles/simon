@@ -20,6 +20,7 @@ class Main extends React.Component<object, State> {
   private audioContext: AudioContext;
   private noteListener: NoteListener;
   private currentInstrument: Instrument;
+  private currentKey: number;
   private currentScale: Scale;
 
   private static generateRandomNotes(count: number, pitchesInScale: Array<number>, rootPitch: number): Array<Note> {
@@ -68,7 +69,7 @@ class Main extends React.Component<object, State> {
     let simonsNotes = Main.generateRandomNotes(
       5,
       this.currentScale.getPitchesRelativeToRoot(),
-      this.currentInstrument.getFirstCTransposed());
+      this.currentInstrument.getFirstCTransposed() + this.currentKey);
     this.setState(
       {
         isGameStarted: true,
@@ -143,6 +144,12 @@ class Main extends React.Component<object, State> {
           </select>
         </div>
         <div>
+          Pick a key:
+          <select onChange={e => this.handleKeyChange(e)}>
+            {Scale.notes.map((x, i) => <option key={'keys_' + i}>{x}</option>)}
+          </select>
+        </div>
+        <div>
           Pick a scale:
           <select onChange={e => this.handleScaleChange(e)}>
             {ScalesDataSource.all.map((x, i) => <option key={'scales_' + i}>{x.name}</option>)}
@@ -172,6 +179,10 @@ class Main extends React.Component<object, State> {
 
   private handleInstrumentChange(e: React.FormEvent<HTMLSelectElement>): void {
     this.currentInstrument = InstrumentsDataSource.all[e.currentTarget.selectedIndex];
+  }
+
+  private handleKeyChange(e: React.FormEvent<HTMLSelectElement>): void {
+    this.currentKey = e.currentTarget.selectedIndex;
   }
 
   private handleScaleChange(e: React.FormEvent<HTMLSelectElement>): void {
