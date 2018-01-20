@@ -4,7 +4,7 @@ Simon will be a call-and-response musical game: [you can play the work-in-progre
 
 ## TODO
 - [x] Instrument selection
-- [ ] Scale selection
+- [x] Scale selection
 - [ ] Key selection
 - [ ] Increase difficulty level after each success
 - [ ] Display notes on stave
