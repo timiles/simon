@@ -6,6 +6,8 @@ import NoteListener from '../utils/NoteListener';
 import InstrumentSelector from './InstrumentSelector';
 import Instrument from '../Instrument';
 import InstrumentsDataSource from '../InstrumentsDataSource';
+import ScalesDataSource from '../data/ScalesDataSource';
+import Scale from '../types/Scale';
 
 export interface State {
   isGameStarted: boolean;
@@ -19,16 +21,17 @@ class Main extends React.Component<object, State> {
   private audioContext: AudioContext;
   private noteListener: NoteListener;
   private currentInstrument: Instrument;
+  private currentScale: Scale;
 
-  private static generateRandomNotes(count: number, minPitch: number): Array<Note> {
+  private static generateRandomNotes(count: number, pitchesInScale: Array<number>, rootPitch: number): Array<Note> {
     let notes = new Array<Note>();
     let previousPitch = 0;
     while (notes.length < count) {
-      const pitch = Math.floor(Math.random() * 11) + minPitch;
-      if (pitch !== previousPitch) {
-        const note = new Note(pitch, 1);
+      const randomPitchInScale = pitchesInScale[Math.floor(Math.random() * pitchesInScale.length)];
+      if (randomPitchInScale !== previousPitch) {
+        const note = new Note(randomPitchInScale + rootPitch, 1);
         notes.push(note);
-        previousPitch = pitch;
+        previousPitch = randomPitchInScale;
       }
     }
     return notes;
@@ -38,6 +41,7 @@ class Main extends React.Component<object, State> {
     super(props);
 
     this.currentInstrument = InstrumentsDataSource.all[0];
+    this.currentScale = ScalesDataSource.all[0];
     this.state = {
       isGameStarted: false,
       isNoteListenerInitialised: false,
@@ -62,7 +66,10 @@ class Main extends React.Component<object, State> {
   }
 
   startGame(): void {
-    let simonsNotes = Main.generateRandomNotes(5, this.currentInstrument.getFirstCTransposed());
+    let simonsNotes = Main.generateRandomNotes(
+      5,
+      this.currentScale.getPitchesRelativeToRoot(),
+      this.currentInstrument.getFirstCTransposed());
     this.setState(
       {
         isGameStarted: true,
@@ -123,6 +130,10 @@ class Main extends React.Component<object, State> {
     this.currentInstrument = instrument;
   }
 
+  handleScaleChange(e: React.FormEvent<HTMLSelectElement>) {
+    this.currentScale = ScalesDataSource.all[e.currentTarget.selectedIndex];
+  }
+
   render() {
     let simonsNoteSpans = [];
     for (let i = 0; i < this.state.simonsNotes.length; i++) {
@@ -140,6 +151,12 @@ class Main extends React.Component<object, State> {
             initialInstrumentName={this.currentInstrument.name}
             onInstrumentChanged={(instrument) => this.onSelectedInstrumentChanged(instrument)}
           />
+        </div>
+        <div>
+          Pick a scale:
+          <select onChange={e => this.handleScaleChange(e)}>
+            {ScalesDataSource.all.map((x, i) => <option key={'scales_' + i}>{x.name}</option>)}
+          </select>
         </div>
         <button
           disabled={!this.state.isNoteListenerInitialised || this.state.isGameStarted}
