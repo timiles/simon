@@ -1,6 +1,6 @@
 import * as React from 'react';
-import InstrumentsDataSource from '../InstrumentsDataSource';
-import Instrument from '../Instrument';
+import InstrumentsDataSource from '../data/InstrumentsDataSource';
+import Instrument from '../types/Instrument';
 
 export interface State {
     selectedInstrumentName: string;

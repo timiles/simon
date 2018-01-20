@@ -1,11 +1,11 @@
 import * as React from 'react';
 import './Main.css';
 import NotePlayer from '../utils/NotePlayer';
-import Note from '../Note';
+import Note from '../types/Note';
 import NoteListener from '../utils/NoteListener';
 import InstrumentSelector from './InstrumentSelector';
-import Instrument from '../Instrument';
-import InstrumentsDataSource from '../InstrumentsDataSource';
+import Instrument from '../types/Instrument';
+import InstrumentsDataSource from '../data/InstrumentsDataSource';
 import ScalesDataSource from '../data/ScalesDataSource';
 import Scale from '../types/Scale';
 

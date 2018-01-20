@@ -1,5 +1,5 @@
 import FrequencyUtils from './FrequencyUtils';
-import Note from '../Note';
+import Note from '../types/Note';
 
 export default class NotePlayer {
   constructor(private audioContext: AudioContext) { }

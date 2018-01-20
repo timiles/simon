@@ -1,7 +1,7 @@
 import { AnalyserInterface } from './FrequencyAnalysers/AnalyserInterface';
 import FrequencyUtils from './FrequencyUtils';
 import PitchBuffer from './PitchBuffer';
-import Note from '../Note';
+import Note from '../types/Note';
 import FrequencyDataAnalyser from './FrequencyAnalysers/FrequencyDataAnalyser';
 
 export default class NoteListener {

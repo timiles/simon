@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import Note from '../Note';
+import Note from '../types/Note';
 
 class TimestampedPitch {
     startTime: number;

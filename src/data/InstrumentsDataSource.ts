@@ -1,4 +1,4 @@
-import Instrument from './Instrument';
+import Instrument from '../types/Instrument';
 
 export default class InstrumentsDataSource {
 

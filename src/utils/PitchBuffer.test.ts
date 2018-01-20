@@ -1,5 +1,5 @@
 import PitchBuffer from './PitchBuffer';
-import Note from '../Note';
+import Note from '../types/Note';
 
 describe('PitchBuffer', () => {
 
