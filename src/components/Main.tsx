@@ -3,7 +3,6 @@ import './Main.css';
 import NotePlayer from '../utils/NotePlayer';
 import Note from '../types/Note';
 import NoteListener from '../utils/NoteListener';
-import InstrumentSelector from './InstrumentSelector';
 import Instrument from '../types/Instrument';
 import InstrumentsDataSource from '../data/InstrumentsDataSource';
 import ScalesDataSource from '../data/ScalesDataSource';
@@ -126,14 +125,6 @@ class Main extends React.Component<object, State> {
     this.setState({ isNoteListenerStarted: true });
   }
 
-  onSelectedInstrumentChanged(instrument: Instrument) {
-    this.currentInstrument = instrument;
-  }
-
-  handleScaleChange(e: React.FormEvent<HTMLSelectElement>) {
-    this.currentScale = ScalesDataSource.all[e.currentTarget.selectedIndex];
-  }
-
   render() {
     let simonsNoteSpans = [];
     for (let i = 0; i < this.state.simonsNotes.length; i++) {
@@ -147,10 +138,9 @@ class Main extends React.Component<object, State> {
       <div>
         <div>
           Pick an instrument:
-          <InstrumentSelector
-            initialInstrumentName={this.currentInstrument.name}
-            onInstrumentChanged={(instrument) => this.onSelectedInstrumentChanged(instrument)}
-          />
+          <select onChange={e => this.handleInstrumentChange(e)}>
+            {InstrumentsDataSource.all.map((x, i) => <option key={'instruments_' + i}>{x.name}</option>)}
+          </select>
         </div>
         <div>
           Pick a scale:
@@ -178,6 +168,14 @@ class Main extends React.Component<object, State> {
         </div>
       </div>
     );
+  }
+
+  private handleInstrumentChange(e: React.FormEvent<HTMLSelectElement>): void {
+    this.currentInstrument = InstrumentsDataSource.all[e.currentTarget.selectedIndex];
+  }
+
+  private handleScaleChange(e: React.FormEvent<HTMLSelectElement>): void {
+    this.currentScale = ScalesDataSource.all[e.currentTarget.selectedIndex];
   }
 }
 
