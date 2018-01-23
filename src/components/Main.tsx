@@ -7,6 +7,7 @@ import Instrument from '../types/Instrument';
 import InstrumentsDataSource from '../data/InstrumentsDataSource';
 import ScalesDataSource from '../data/ScalesDataSource';
 import Scale from '../types/Scale';
+import Simon from '../Simon';
 
 export interface State {
   isGameStarted: boolean;
@@ -22,20 +23,6 @@ class Main extends React.Component<object, State> {
   private currentInstrument: Instrument;
   private currentKey: number;
   private currentScale: Scale;
-
-  private static generateRandomNotes(count: number, pitchesInScale: Array<number>, rootPitch: number): Array<Note> {
-    let notes = new Array<Note>();
-    let previousPitch = 0;
-    while (notes.length < count) {
-      const randomPitchInScale = pitchesInScale[Math.floor(Math.random() * pitchesInScale.length)];
-      if (randomPitchInScale !== previousPitch) {
-        const note = new Note(randomPitchInScale + rootPitch, 1);
-        notes.push(note);
-        previousPitch = randomPitchInScale;
-      }
-    }
-    return notes;
-  }
 
   constructor(props: object) {
     super(props);
@@ -66,10 +53,10 @@ class Main extends React.Component<object, State> {
   }
 
   startGame(): void {
-    let simonsNotes = Main.generateRandomNotes(
-      5,
-      this.currentScale.getPitchesRelativeToRoot(),
-      this.currentInstrument.getFirstCTransposed() + this.currentKey);
+    const pitchesInScale = this.currentScale.getPitchesRelativeToRoot();
+    const rootPitch = this.currentInstrument.getFirstCTransposed() + this.currentKey;
+    const simon = new Simon(pitchesInScale, rootPitch);
+    const simonsNotes = simon.say();
     this.setState(
       {
         isGameStarted: true,
